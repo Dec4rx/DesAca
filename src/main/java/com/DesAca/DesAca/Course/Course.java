@@ -16,6 +16,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import java.util.List;
 
@@ -70,7 +72,7 @@ public class Course {
     private String requirements;
 
     @OneToMany(mappedBy = "course")
-    @JsonManagedReference
+    @JsonIgnore
     private List<ProfessorCourse> professorCourses;
 
     @Column(nullable = false)

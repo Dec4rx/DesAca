@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.DesAca.DesAca.Professor.Professor;
 import com.DesAca.DesAca.Course.Course;
@@ -25,6 +26,7 @@ public class ProfessorCourse {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonIgnore
     private Course course;
 
     @Column()

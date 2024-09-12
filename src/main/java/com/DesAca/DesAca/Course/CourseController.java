@@ -26,8 +26,12 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
     }
 
-    @GetMapping("/not-assigned/{professorId}")
-    public ResponseEntity<List<Course>> getCoursesNotAssignedToProfessor(@PathVariable Long professorId) {
+    // @GetMapping
+    // public ResponseEntity<List<Course>>
+
+    //TO DO Modify the endpoint to return the courses not assigned to a professor
+    @GetMapping("/not-assigned")
+    public ResponseEntity<List<Course>> getCoursesNotAssignedToProfessor() {
         List<Course> courses = courseService.getCoursesNotAssignedToProfessor();
         return ResponseEntity.ok(courses);
     }
