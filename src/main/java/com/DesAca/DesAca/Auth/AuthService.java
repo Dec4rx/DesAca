@@ -12,19 +12,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
     private final ProfessorRepository professorRepository;
-    public boolean login(String email, String password) {
+
+    public Professor login(String email, String password) {
         // Verificar si el profesor con el email existe
         Optional<Professor> professorOptional = professorRepository.findByEmail(email);
 
         if (professorOptional.isPresent()) {
             Professor professor = professorOptional.get();
-            
+
             // Simulamos la verificación de la contraseña (en un caso real, se debe usar hashing)
             if (professor.getPassword().equals(password)) {
-                return true; // Credenciales correctas
+                return professor; // Credenciales correctas, retornar el objeto Professor
             }
         }
 
-        return false; // Credenciales incorrectas
+        return null; // Credenciales incorrectas
     }
 }
