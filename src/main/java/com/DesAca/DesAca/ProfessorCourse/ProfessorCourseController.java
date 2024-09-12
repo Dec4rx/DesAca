@@ -45,4 +45,10 @@ public class ProfessorCourseController {
         return ResponseEntity.ok(courses);
     }
 
+    @GetMapping("/{professorId}/finished")
+    public ResponseEntity<List<CourseSummaryDTO>> getFinishedCoursesByProfessor(@PathVariable Long professorId) {
+        List<CourseSummaryDTO> courses = professorCourseService.getFinishedCoursesByProfessorId(professorId);
+        return ResponseEntity.ok(courses);
+    }
+
 }

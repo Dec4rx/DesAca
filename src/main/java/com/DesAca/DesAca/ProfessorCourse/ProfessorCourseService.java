@@ -43,4 +43,7 @@ public class ProfessorCourseService {
         return professorCourseRepository_Courses.findCourseSummariesByProfessorId(professorId);
     }
 
+    public List<CourseSummaryDTO> getFinishedCoursesByProfessorId(Long professorId) {
+        return professorCourseRepository.findFinishedCoursesByProfessorId(professorId);
+    }
 }
