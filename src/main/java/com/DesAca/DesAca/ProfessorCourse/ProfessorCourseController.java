@@ -1,6 +1,9 @@
 package com.DesAca.DesAca.ProfessorCourse;
 
 import java.util.List;
+
+import java.util.Map;
+import java.util.HashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +25,18 @@ public class ProfessorCourseController {
     private final ProfessorCourseService professorCourseService;
 
     @PostMapping
-    public ResponseEntity<String> assignCourseToProfesso(@Valid @RequestBody ProfessorCourseDTO professorCourseDTO) {
-        professorCourseService.createProfessorCourse(professorCourseDTO.getProfessorId(),
-                professorCourseDTO.getCourseId(), professorCourseDTO.isFinished());
-        return new ResponseEntity<>("Relación guardada exitosamente", HttpStatus.CREATED);
+    public ResponseEntity<Map<String, String>> assignCourseToProfessor(
+            @Valid @RequestBody ProfessorCourseDTO professorCourseDTO) {
+        professorCourseService.createProfessorCourse(
+                professorCourseDTO.getProfessorId(),
+                professorCourseDTO.getCourseId(),
+                professorCourseDTO.isFinished());
+
+        // Crear una respuesta JSON
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Relación guardada exitosamente");
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{professorId}")
@@ -34,5 +45,4 @@ public class ProfessorCourseController {
         return ResponseEntity.ok(courses);
     }
 
-    
 }
