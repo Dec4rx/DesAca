@@ -21,9 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
-import com.DesAca.DesAca.Professor.Professor;
 import com.DesAca.DesAca.ProfessorCourse.ProfessorCourse;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.time.LocalDate;
 

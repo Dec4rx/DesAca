@@ -23,7 +23,11 @@ public class CourseController {
     @PostMapping
     public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course) {
         Course createdCourse = courseService.createCourse(course);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+        if (createdCourse != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     // @GetMapping
