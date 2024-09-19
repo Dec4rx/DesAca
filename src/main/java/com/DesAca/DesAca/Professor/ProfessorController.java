@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.DesAca.DesAca.Course.Course;
-import com.DesAca.DesAca.Course.CourseService;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +29,20 @@ public class ProfessorController {
 
     // Método para actualización parcial usando PATCH
     @PatchMapping("/{id}")
-    public ResponseEntity<ProfessorDTO> updateProfessorPartial(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<ProfessorDTO> updateProfessorPartial(@PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
+        ProfessorDTO updatedProfessor = professorService.updateProfessorPartial(id, updates);
+        return ResponseEntity.ok(updatedProfessor);
+    }
+
+    // Método para actualizar el status de un profesor
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ProfessorDTO> updateProfessorStatus(@PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
+        // Solo se espera el campo "status" en el mapa de actualizaciones
+        if (!updates.containsKey("status")) {
+            return ResponseEntity.badRequest().body(null);
+        }
         ProfessorDTO updatedProfessor = professorService.updateProfessorPartial(id, updates);
         return ResponseEntity.ok(updatedProfessor);
     }

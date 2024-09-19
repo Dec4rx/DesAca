@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+        System.out.println("Soy la bandera: "+ errors);
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 

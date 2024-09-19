@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,23 +28,24 @@ public class Professor {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(message = "Correo no puede ser nulo")
+    @NotBlank(message = "Nombre no puede ser nulo")
     @Size(min = 3, message = "Nombre debe tener al menos 3 caracteres")
     private String name;
 
     @Column(nullable = false)
-    @NotBlank(message = "Correo no puede ser nulo")
+    @NotBlank(message = "Apellido paterno no puede ser nulo")
     @Size(min = 3, message = "Apellido debe tener al menos 3 caracteres")
     private String middleName;
 
     @Column(nullable = false)
-    @NotBlank(message = "Correo no puede ser nulo")
+    @NotBlank(message = "Apellido Materno no puede ser nulo")
     @Size(min = 3, message = "Apellido debe tener al menos 3 caracteres")
     private String lastName;
 
     @Column(nullable = false, unique = true)
     @NotBlank(message = "Correo no puede ser nulo")
     @Email(message = "Correo debe ser un correo electrónico válido")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@aguascalientes\\.tecnm\\.mx$", message = "El correo debe pertenecer al dominio @aguascalientes.tecnm.mx")
     private String email;
 
     @Column(nullable = false)
@@ -53,6 +55,7 @@ public class Professor {
 
     @Column(nullable = false)
     @NotBlank(message = "RFC no puede ser nulo")
+    @Size(min = 13, max = 13, message = "RFC debe tener 13 caracteres")
     private String rfc;
 
     @Column(nullable = false)
