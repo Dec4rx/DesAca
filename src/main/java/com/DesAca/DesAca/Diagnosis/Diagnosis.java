@@ -90,6 +90,11 @@ public class Diagnosis {
     @NotBlank(message = "El Periodo no puede ser nulo")
     @Size(min = 3, message = "El Periodo debe tener al menos 3 caracteres")
     private String period;
+    
+    @Column(nullable = false)
+    @NotBlank(message = "El Turno no puede ser nulo")
+    @Size(min = 3, message = "El Turno debe tener al menos 3 caracteres")
+    private String shift;
 
     @Column(nullable = false)
     @NotNull(message = "La Fecha de Inicio no puede ser nula")
