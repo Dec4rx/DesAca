@@ -99,7 +99,7 @@ public class Diagnosis {
     @Column(nullable = false)
     @NotNull(message = "La Fecha de Inicio no puede ser nula")
     @FutureOrPresent(message = "La Fecha de Inicio debe ser en el presente o futuro")
-    private LocalDate starDate;
+    private LocalDate startDate;
 
     @Column(nullable = false)
     @NotNull(message = "La Fecha de Fin no puede ser nula")
