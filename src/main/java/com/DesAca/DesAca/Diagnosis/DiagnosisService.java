@@ -1,5 +1,9 @@
 package com.DesAca.DesAca.Diagnosis;
 
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -13,8 +17,12 @@ public class DiagnosisService {
         return diagnosisRepository.save(diagnosis);
     }
 
-    public Diagnosis getDiagnosisById(Long id) {
-        return diagnosisRepository.findById(id).orElseThrow();
+    public ResponseEntity<Diagnosis> getDiagnosisById(Long id) {
+        Optional<Diagnosis> diagnosis = diagnosisRepository.findById(id);
+        if (diagnosis.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(diagnosis.get());
     }
 
     public void deleteDiagnosis(Long id) {

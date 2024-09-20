@@ -36,11 +36,7 @@ public class DiagnosisController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Diagnosis> getDiagnosisById(@PathVariable Long id) {
-        Diagnosis diagnosis = diagnosisService.getDiagnosisById(id);
-        if (diagnosis == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(diagnosis);
+        return diagnosisService.getDiagnosisById(id);
     }
 
 }
