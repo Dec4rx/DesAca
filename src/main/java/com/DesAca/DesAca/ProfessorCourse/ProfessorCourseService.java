@@ -8,7 +8,7 @@ import com.DesAca.DesAca.Course.CourseRepository;
 import com.DesAca.DesAca.Course.CourseSummaryDTO;
 import com.DesAca.DesAca.Professor.Professor;
 import com.DesAca.DesAca.Professor.ProfessorRepository;
-import com.DesAca.DesAca.ProfessorCourse.ProfessorCourseRepository_Courses;
+
 
 import lombok.RequiredArgsConstructor;
 
