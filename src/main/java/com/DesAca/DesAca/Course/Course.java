@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,12 +41,12 @@ public class Course {
     private String courseName;
 
     @Column(nullable = false)
-    @NotBlank(message = "La fecha de inicio no puede ser nula")
+    @NotNull(message = "La fecha de inicio no puede ser nula")
     @FutureOrPresent(message = "La fecha de inicio debe ser en el presente o futuro")
     private LocalDate startDate;
 
     @Column(nullable = false)
-    @NotBlank(message = "La fecha de inicio no puede ser nula")
+    @NotNull(message = "La fecha de inicio no puede ser nula")
     @FutureOrPresent(message = "La fecha de inicio debe ser en el presente o futuro")
     private LocalDate endDate;
 
@@ -60,7 +61,7 @@ public class Course {
     private String schedule;
 
     @Column(nullable = false)
-    @NotBlank(message = "La capacidad no puede ser nula")
+    @NotNull(message = "La capacidad no puede ser nula")
     @Min(value = 1, message = "La capacidad debe ser mayor a 0")
     private int capacity;
 
