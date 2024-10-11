@@ -1,5 +1,6 @@
 package com.DesAca.DesAca.Diagnosis;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,14 @@ public class DiagnosisService {
 
     public Iterable<Diagnosis> getAllDiagnosis() {
         return diagnosisRepository.findAll();
+    }
+
+    public ResponseEntity<List<Diagnosis>> getFullyAuthorizedDiagnoses() {
+        List<Diagnosis> diagnoses = diagnosisRepository.findByIsAuthorizedByFirstTrueAndIsAuthorizedBySecondTrue();
+        if (diagnoses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(diagnoses);
     }
 
     // public Diagnosis updateDiagnosisPartial(Long id, Diagnosis diagnosis) {

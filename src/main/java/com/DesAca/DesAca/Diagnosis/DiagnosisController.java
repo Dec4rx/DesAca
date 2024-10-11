@@ -9,6 +9,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +40,11 @@ public class DiagnosisController {
     @GetMapping("/{id}")
     public ResponseEntity<Diagnosis> getDiagnosisById(@PathVariable Long id) {
         return diagnosisService.getDiagnosisById(id);
+    }
+
+    @GetMapping("/authorized")
+    public ResponseEntity<List<Diagnosis>> getFullyAuthorizedDiagnoses() {
+        return diagnosisService.getFullyAuthorizedDiagnoses();
     }
 
 }

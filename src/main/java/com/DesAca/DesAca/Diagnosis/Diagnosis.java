@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -74,12 +73,10 @@ public class Diagnosis {
     @Size(min = 3, message = "La Actividad/Evento debe tener al menos 3 caracteres")
     private String activityEvent;
 
-
     @Column(columnDefinition = "TEXT", nullable = false)
     @NotBlank(message = "El Objetivo no puede ser nulo")
     @Size(min = 10, message = "El Objetivo debe tener al menos 10 caracteres")
     private String objective;
-
 
     @Column(nullable = false)
     @NotBlank(message = "Las carreras atendidas no puede ser nulas")
@@ -90,7 +87,7 @@ public class Diagnosis {
     @NotBlank(message = "El Periodo no puede ser nulo")
     @Size(min = 3, message = "El Periodo debe tener al menos 3 caracteres")
     private String period;
-    
+
     @Column(nullable = false)
     @NotBlank(message = "El Turno no puede ser nulo")
     @Size(min = 3, message = "El Turno debe tener al menos 3 caracteres")
@@ -116,5 +113,14 @@ public class Diagnosis {
     @Size(min = 3, message = "El Facilitador debe tener al menos 3 caracteres")
     private String facilitators;
 
+    // New field for feedback
+    @Column(columnDefinition = "TEXT")
+    private String feedback;
+
+    // New fields for authorizations
+    @Column(nullable = false)
+    private boolean isAuthorizedByFirst;
+    @Column(nullable = false)
+    private boolean isAuthorizedBySecond;
 
 }
