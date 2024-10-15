@@ -11,13 +11,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 @Entity
 public class Diagnosis {
     @Id
@@ -95,7 +99,7 @@ public class Diagnosis {
 
     @Column(nullable = false)
     @NotNull(message = "La Fecha de Inicio no puede ser nula")
-    @FutureOrPresent(message = "La Fecha de Inicio debe ser en el presente o futuro")
+    // @FutureOrPresent(message = "La Fecha de Inicio debe ser en el presente o futuro")
     private LocalDate startDate;
 
     @Column(nullable = false)
