@@ -15,7 +15,6 @@ public class CourseSummaryDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private String shift;
-    private String schedule;
     private int capacity;
     private String requirements;
     private boolean isFinished;

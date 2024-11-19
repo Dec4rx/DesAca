@@ -32,6 +32,11 @@ public class DiagnosisService {
         return ResponseEntity.ok(diagnosis.get());
     }
 
+    public Diagnosis findDiagnosisById(Long id) {
+        return diagnosisRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Diagnosis with ID " + id + " not found"));
+    }
+
     public void deleteDiagnosis(Long id) {
         diagnosisRepository.deleteById(id);
     }

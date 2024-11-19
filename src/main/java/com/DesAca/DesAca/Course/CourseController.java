@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.DesAca.DesAca.Diagnosis.Diagnosis;
+import com.DesAca.DesAca.Diagnosis.DiagnosisService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -19,16 +22,14 @@ import lombok.RequiredArgsConstructor;
 public class CourseController {
 
     private final CourseService courseService;
+    private final DiagnosisService diagnosisService;
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course) {
-        Course createdCourse = courseService.createCourse(course);
-        if (createdCourse != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<Course> createCourse(@Valid @RequestBody CourseDTO courseDTO) {
+        Course createdCourse = courseService.createCourse(courseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
     }
+
 
     // @GetMapping
     // public ResponseEntity<List<Course>>
