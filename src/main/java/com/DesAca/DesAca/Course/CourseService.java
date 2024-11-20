@@ -20,7 +20,6 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final DiagnosisRepository diagnosisRepository;
 
-
     @Transactional
     public Course createCourse(CourseDTO courseDTO) {
         logger.info("Iniciando la creación del curso con datos: {}", courseDTO);
@@ -45,6 +44,10 @@ public class CourseService {
         course.setType(courseDTO.getType());
         course.setApproach(courseDTO.getApproach());
         course.setPersonToTeach(courseDTO.getPersonToTeach());
+        course.setDepartament(courseDTO.getDepartament());
+        course.setRequirements(courseDTO.getRequirements());
+        course.setStartDate(courseDTO.getStartDate());
+        course.setEndDate(courseDTO.getEndDate());
         course.setInstitutionOrAcademic(courseDTO.getInstitutionOrAcademic());
         course.setShift(courseDTO.getShift());
         course.setCapacity(courseDTO.getCapacity());

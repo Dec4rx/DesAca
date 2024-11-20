@@ -11,6 +11,8 @@ import com.DesAca.DesAca.ProfessorCourse.ProfessorCourse;
 import com.DesAca.DesAca.Diagnosis.Diagnosis;
 
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
