@@ -2,8 +2,10 @@ package com.DesAca.DesAca.Diagnosis;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
+import com.DesAca.DesAca.Course.Course;
 
 @Data
 @AllArgsConstructor
@@ -108,8 +112,6 @@ public class Diagnosis {
     private LocalDate endDate;
 
     @Column(nullable = false)
-    @NotBlank(message = "El Estado no puede ser nulo")
-    @Size(min = 3, message = "El Estado debe tener al menos 3 caracteres")
     private String status;
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -126,5 +128,8 @@ public class Diagnosis {
     private boolean isAuthorizedByFirst;
     @Column(nullable = false)
     private boolean isAuthorizedBySecond;
+
+    @OneToOne(mappedBy = "diagnosis", fetch = FetchType.LAZY)
+    private Course course;
 
 }

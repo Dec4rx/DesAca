@@ -15,8 +15,10 @@ import com.DesAca.DesAca.Diagnosis.Diagnosis;
 @NoArgsConstructor
 @Entity
 public class Course {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq_gen")
+    @SequenceGenerator(name = "course_seq_gen", sequenceName = "course_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false)
@@ -24,14 +26,18 @@ public class Course {
     @Size(min = 3, message = "Nombre del curso debe tener al menos 3 caracteres")
     private String courseName;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, optional = false)
+    @JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_diagnosis"))
+    private Diagnosis diagnosis;
+
     @Column(nullable = false)
     @NotNull(message = "La fecha de inicio no puede ser nula")
     @FutureOrPresent(message = "La fecha de inicio debe ser en el presente o futuro")
     private LocalDate startDate;
 
     @Column(nullable = false)
-    @NotNull(message = "La fecha de inicio no puede ser nula")
-    @FutureOrPresent(message = "La fecha de inicio debe ser en el presente o futuro")
+    @NotNull(message = "La fecha de fin no puede ser nula")
+    @FutureOrPresent(message = "La fecha de fin debe ser en el presente o futuro")
     private LocalDate endDate;
 
     @Column(nullable = false)
@@ -46,7 +52,6 @@ public class Course {
 
     @Column(columnDefinition = "TEXT", nullable = false)
     @NotBlank(message = "Los requisitos no pueden ser nulos")
-    @Size(min = 3, message = "Los requisitos deben tener al menos 3 caracteres")
     private String requirements;
 
     @OneToMany(mappedBy = "course")
@@ -56,71 +61,67 @@ public class Course {
     @Column(nullable = false)
     private boolean enabled;
 
+    @Column(nullable = false)
+    private LocalDate dateRegistration = LocalDate.now();
 
     @Column(nullable = false)
-    private LocalDate dateRegistration = LocalDate.now();  // Fecha de registro, se establece al momento actual
+    @NotBlank(message = "El departamento no puede estar vacío")
+    @Size(min = 3, message = "El departamento debe tener al menos 3 caracteres")
+    private String departament;
 
     @Column(nullable = false)
-    @NotBlank
-    private String departament;  // Departamento asociado
+    @NotBlank(message = "El público objetivo no puede estar vacío")
+    private String aimedAt;
 
-    @Column
-    @NotBlank
-    private String aimedAt;  // Dirigido a
+    @Column(nullable = false)
+    @NotBlank(message = "El tipo de curso no puede estar vacío")
+    private String type;
 
-    @Column
-    @NotBlank
-    private String type;  // Tipo de curso
+    @Column(nullable = false)
+    @NotBlank(message = "El enfoque del curso no puede estar vacío")
+    private String approach;
 
-    @Column
-    @NotBlank
-    private String approach;  // Enfoque del curso
+    @Column(nullable = false)
+    @NotBlank(message = "La persona encargada de enseñar no puede estar vacía")
+    private String personToTeach;
 
-    @Column
-    @NotBlank
-    private String personToTeach;  // Persona encargada de enseñar
+    @Column(nullable = false)
+    @NotBlank(message = "La institución o academia no puede estar vacía")
+    private String institutionOrAcademic;
 
-    @Column
-    @NotBlank
-    private String institutionOrAcademic;  // Institución o academia
+    @Column(nullable = false)
+    @Min(value = 1, message = "El número de horas debe ser mayor a 0")
+    private int numberHours;
 
-    @Column
-    private int numberHours;  // Número de horas
+    @Column(nullable = false)
+    @NotBlank(message = "El lugar no puede estar vacío")
+    private String place;
 
-    @Column
-    @NotBlank
-    private String place;  // Lugar
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotBlank(message = "La justificación no puede estar vacía")
+    private String justification;
 
-    @Column(columnDefinition = "TEXT")
-    @NotBlank
-    private String justification;  // Justificación
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotBlank(message = "El objetivo no puede estar vacío")
+    private String objective;
 
-    @Column(columnDefinition = "TEXT")
-    @NotBlank
-    private String objective;  // Objetivo
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotBlank(message = "Los contenidos temáticos no pueden estar vacíos")
+    private String thematicContents;
 
-    @Column(columnDefinition = "TEXT")
-    @NotBlank
-    private String thematicContents;  // Contenidos temáticos
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotBlank(message = "Los recursos no pueden estar vacíos")
+    private String resources;
 
-    @Column(columnDefinition = "TEXT")
-    @NotBlank
-    private String resources;  // Recursos
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotBlank(message = "Las fuentes de información no pueden estar vacías")
+    private String informationSources;
 
-    @Column(columnDefinition = "TEXT")
-    @NotBlank
-    private String informationSources;  // Fuentes de información
+    @Column(nullable = false)
+    @NotBlank(message = "La autorización no puede estar vacía")
+    private String authorization;
 
-    @Column
-    @NotBlank
-    private String authorization;  // Autorización
-
-    @Column(columnDefinition = "TEXT")
-    @NotBlank
-    private String review;  // Revisión
-
-    // Relación uno-a-uno con Diagnosis
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false)
-    private Diagnosis diagnosis;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotBlank(message = "La revisión no puede estar vacía")
+    private String review;
 }
