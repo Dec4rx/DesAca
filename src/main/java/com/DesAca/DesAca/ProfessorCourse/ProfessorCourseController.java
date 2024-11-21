@@ -27,16 +27,23 @@ public class ProfessorCourseController {
     @PostMapping
     public ResponseEntity<Map<String, String>> assignCourseToProfessor(
             @Valid @RequestBody ProfessorCourseDTO professorCourseDTO) {
-        professorCourseService.createProfessorCourse(
-                professorCourseDTO.getProfessorId(),
-                professorCourseDTO.getCourseId(),
-                professorCourseDTO.isFinished());
-
-        // Crear una respuesta JSON
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Relación guardada exitosamente");
+        try {
+            professorCourseService.createProfessorCourse(
+                    professorCourseDTO.getProfessorId(),
+                    professorCourseDTO.getCourseId(),
+                    professorCourseDTO.isFinished());
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+            response.put("message", "Relación guardada exitosamente");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            response.put("error", "Error interno del servidor");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{professorId}")

@@ -20,6 +20,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 import com.DesAca.DesAca.Course.Course;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @AllArgsConstructor
@@ -130,6 +131,7 @@ public class Diagnosis {
     private boolean isAuthorizedBySecond;
 
     @OneToOne(mappedBy = "diagnosis", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Course course;
 
 }

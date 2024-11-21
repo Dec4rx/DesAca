@@ -1,5 +1,6 @@
 package com.DesAca.DesAca.ProfessorCourse;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,6 @@ import com.DesAca.DesAca.Course.CourseRepository;
 import com.DesAca.DesAca.Course.CourseSummaryDTO;
 import com.DesAca.DesAca.Professor.Professor;
 import com.DesAca.DesAca.Professor.ProfessorRepository;
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +30,22 @@ public class ProfessorCourseService {
         Course course = courseRepository.findById(course_id)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
 
+        // Verificar la capacidad del curso
+        if (course.getCapacity() <= 0) {
+            throw new IllegalStateException("El curso ya no tiene capacidad disponible.");
+        }
+
+        // Verificar si la fecha de inicio del curso es hoy o una fecha posterior
+        if (!course.getStartDate().isAfter(LocalDate.now())) {
+            throw new IllegalStateException("No se puede inscribir en un curso que inicia hoy o ya ha iniciado.");
+        }
+
+        // Verificar si el curso ya está asignado al profesor
+        boolean alreadyAssigned = professorCourseRepository.existsByProfessorAndCourse(professor, course);
+        if (alreadyAssigned) {
+            throw new IllegalStateException("El profesor ya está inscrito en este curso.");
+        }
+
         // Crear la relación
         ProfessorCourse professorCourse = new ProfessorCourse();
         professorCourse.setProfessor(professor);
@@ -37,6 +53,9 @@ public class ProfessorCourseService {
         professorCourse.setFinished(isFinished);
         professorCourseRepository.save(professorCourse);
 
+        // Reducir la capacidad del curso
+        course.setCapacity(course.getCapacity() - 1);
+        courseRepository.save(course);
     }
 
     public List<CourseSummaryDTO> getCoursesByProfessorId(Long professorId) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.DesAca.DesAca.Course.Course;
 import com.DesAca.DesAca.Course.CourseSummaryDTO;
+import com.DesAca.DesAca.Professor.Professor;
 
 @Repository
 public interface ProfessorCourseRepository extends JpaRepository<ProfessorCourse, Long> {
@@ -20,4 +21,8 @@ public interface ProfessorCourseRepository extends JpaRepository<ProfessorCourse
    "FROM ProfessorCourse pc JOIN pc.course c " +
    "WHERE pc.professor.id = :professorId AND pc.isFinished = true")
     List<CourseSummaryDTO> findFinishedCoursesByProfessorId(@Param("professorId") Long professorId);
+
+
+    boolean existsByProfessorAndCourse(Professor professor, Course course);
+    boolean existsByCourse(Course course);
 }

@@ -30,6 +30,7 @@ public class Course {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, optional = false)
     @JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_diagnosis"))
+    @JsonIgnore
     private Diagnosis diagnosis;
 
     @Column(nullable = false)
@@ -126,4 +127,10 @@ public class Course {
     @Column(columnDefinition = "TEXT", nullable = false)
     @NotBlank(message = "La revisión no puede estar vacía")
     private String review;
+
+    @Column(nullable = true)
+    private String file1Path;
+
+    @Column(nullable = true)
+    private String file2Path;
 }
