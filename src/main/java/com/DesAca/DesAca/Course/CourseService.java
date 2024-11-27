@@ -3,12 +3,15 @@ package com.DesAca.DesAca.Course;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.DesAca.DesAca.Diagnosis.Diagnosis;
 import com.DesAca.DesAca.Diagnosis.DiagnosisRepository;
 import com.DesAca.DesAca.Diagnosis.DiagnosisService;
+import com.DesAca.DesAca.Instructor.Instructor;
+import com.DesAca.DesAca.Instructor.InstructorRepository;
 import com.DesAca.DesAca.ProfessorCourse.ProfessorCourseRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,9 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final DiagnosisRepository diagnosisRepository;
     private final ProfessorCourseRepository professorCourseRepository;
+
+    @Autowired
+    private InstructorRepository instructorRepository;
 
     @Transactional
     public Course createCourse(CourseDTO courseDTO) {
@@ -141,15 +147,80 @@ public class CourseService {
     }
 
     public List<Course> getAvailableCourses() {
-    LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now();
 
-    // Buscar cursos que tengan ambos archivos cargados, no estén en `professor_courses` y cuya fecha de inicio sea anterior a hoy
-    return courseRepository.findAll().stream()
-            .filter(course -> course.getFile1Path() != null && !course.getFile1Path().isBlank()) // Validar que file1 esté cargado
-            .filter(course -> course.getFile2Path() != null && !course.getFile2Path().isBlank()) // Validar que file2 esté cargado
-            .filter(course -> !professorCourseRepository.existsByCourse(course)) // Validar que no esté en `professor_courses`
-            .filter(course -> course.getStartDate().isBefore(today)) // Validar que la fecha de inicio sea anterior a hoy
-            .filter(course -> course.getCapacity() != 0)
-            .collect(Collectors.toList());
-}
+        // Buscar cursos que tengan ambos archivos cargados, no estén en
+        // `professor_courses` y cuya fecha de inicio sea anterior a hoy
+        return courseRepository.findAll().stream()
+                .filter(course -> course.getFile1Path() != null && !course.getFile1Path().isBlank()) // Validar que
+                                                                                                     // file1 esté
+                                                                                                     // cargado
+                .filter(course -> course.getFile2Path() != null && !course.getFile2Path().isBlank()) // Validar que
+                                                                                                     // file2 esté
+                                                                                                     // cargado
+                .filter(course -> !professorCourseRepository.existsByCourse(course)) // Validar que no esté en
+                                                                                     // `professor_courses`
+                .filter(course -> course.getStartDate().isBefore(today)) // Validar que la fecha de inicio sea anterior
+                                                                         // a hoy
+                .filter(course -> course.getCapacity() != 0)
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public Course createAndAssignInstructorToCourse(Long courseId, String instructorName, String username, String password) {
+        Instructor instructor = new Instructor();
+        instructor.setName(instructorName);
+        instructor.setUsername(username);
+        instructor.setPassword(password);  // Consider hashing the password before saving
+        Instructor savedInstructor = instructorRepository.save(instructor);
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+        
+        course.setInstructor(savedInstructor);
+        return courseRepository.save(course);
+    }
+
+    public List<Course> getCoursesByInstructor(Long instructorId) {
+        return courseRepository.findByInstructorId(instructorId);
+    }
+
+    @Value("${app.file.storage-location}")
+    private String storageLocation;
+
+    public Course addPdfEvidence(Long courseId, MultipartFile file) throws IOException {
+        if (!file.getContentType().equals("application/pdf")) {
+            throw new IllegalArgumentException("Solo se permiten archivos PDF");
+        }
+
+        Course course = courseRepository.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+
+        // Normalizar el nombre del curso para usarlo como nombre de carpeta
+        String courseFolderName = course.getCourseName().replaceAll("[^a-zA-Z0-9\\-]", "_");
+        Path courseFolderPath = Paths.get(storageLocation + courseFolderName);
+
+        // Crea el directorio del curso si no existe
+        if (Files.notExists(courseFolderPath)) {
+            Files.createDirectories(courseFolderPath);
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename(); // Añade timestamp para evitar duplicados
+        Path targetLocation = courseFolderPath.resolve(fileName);
+        Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+        // Guardar la ruta del archivo en el curso
+        course.setPdfEvidencePath(targetLocation.toString());
+        return courseRepository.save(course);
+    }
+
+
+    public Course updateCourseFolio(Long courseId, String folio) {
+        Course course = courseRepository.findById(courseId)
+            .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
+
+        course.setFolio(folio);
+        return courseRepository.save(course);
+    }
 }

@@ -1,14 +1,20 @@
 package com.DesAca.DesAca.Professor;
 
 import java.util.List;
+
+import com.DesAca.DesAca.Department.Department;
 import com.DesAca.DesAca.ProfessorCourse.ProfessorCourse;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -80,5 +86,9 @@ public class Professor {
     @JsonIgnore // Evita la recursión al ignorar la lista de 'professorCourses' en la serialización
     @JsonBackReference // Evita la recursión al ignorar la lista de 'professorCourses' en la serialización
     private List<ProfessorCourse> professorCourses;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_department"))
+    private Department departamentid;
 
 }

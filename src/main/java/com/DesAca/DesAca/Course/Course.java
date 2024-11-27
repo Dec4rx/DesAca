@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.List;
 import com.DesAca.DesAca.ProfessorCourse.ProfessorCourse;
 import com.DesAca.DesAca.Diagnosis.Diagnosis;
+import com.DesAca.DesAca.Instructor.Instructor;
+import com.DesAca.DesAca.Department.Department;
 
 @Data
 @Getter
@@ -32,6 +34,14 @@ public class Course {
     @JoinColumn(name = "diagnosis_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_diagnosis"))
     @JsonIgnore
     private Diagnosis diagnosis;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instructor_id", referencedColumnName = "id", nullable = true, foreignKey = @ForeignKey(name = "fk_course_instructor"))
+    private Instructor instructor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_department"))
+    private Department departamentid;
 
     @Column(nullable = false)
     @NotNull(message = "La fecha de inicio no puede ser nula")
@@ -133,4 +143,10 @@ public class Course {
 
     @Column(nullable = true)
     private String file2Path;
+
+    @Column(nullable = true)
+    private String pdfEvidencePath; // Almacena la ruta del archivo PDF
+
+    @Column(name = "folio", nullable = true)
+    private String folio; // Campo para el folio
 }

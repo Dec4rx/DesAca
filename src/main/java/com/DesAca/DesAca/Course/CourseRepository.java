@@ -16,5 +16,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
        "(c.file2Path IS NOT NULL AND c.file2Path <> '') AND " +
        "c.id NOT IN (SELECT pc.course.id FROM ProfessorCourse pc)")
 List<Course> findCoursesWithFilesNotAssignedToProfessor();
+
+@Query("SELECT c FROM Course c WHERE c.instructor.id = :instructorId")
+    List<Course> findByInstructorId(Long instructorId);
     
 }

@@ -1,11 +1,13 @@
 package com.DesAca.DesAca.Course;
 
+import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -123,4 +125,39 @@ public class CourseController {
         return ResponseEntity.ok(availableCourses);
     }
 
+    @PostMapping("/assign-instructor")
+    public ResponseEntity<Course> createAndAssignInstructorToCourse(
+            @RequestParam Long courseId,
+            @RequestParam String instructorName,
+            @RequestParam String username,
+            @RequestParam String password) {
+        Course updatedCourse = courseService.createAndAssignInstructorToCourse(courseId, instructorName, username, password);
+        return ResponseEntity.ok(updatedCourse);
+    }
+
+
+    @GetMapping("/instructors/{instructorId}/courses")
+    public ResponseEntity<List<Course>> getCoursesByInstructor(@PathVariable Long instructorId) {
+        List<Course> courses = courseService.getCoursesByInstructor(instructorId);
+        return ResponseEntity.ok(courses);
+    }
+
+
+    @PostMapping("/{courseId}/upload-pdf")
+    public ResponseEntity<Course> uploadPdfEvidence(@PathVariable Long courseId, @RequestParam("file") MultipartFile file) {
+        try {
+            Course updatedCourse = courseService.addPdfEvidence(courseId, file);
+            return ResponseEntity.ok(updatedCourse);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/{courseId}/folio")
+    public ResponseEntity<Course> updateCourseFolio(@PathVariable Long courseId, @RequestParam String folio) {
+        Course updatedCourse = courseService.updateCourseFolio(courseId, folio);
+        return ResponseEntity.ok(updatedCourse);
+    }
 }

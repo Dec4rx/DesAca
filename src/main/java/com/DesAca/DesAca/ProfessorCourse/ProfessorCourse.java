@@ -34,5 +34,9 @@ public class ProfessorCourse {
 
     @Column(nullable = false)
     private boolean isFinished;
+
+    // Agregar campo para el porcentaje de asistencia
+    @Column(nullable = false)
+    private double attendancePercentage;
 }
 

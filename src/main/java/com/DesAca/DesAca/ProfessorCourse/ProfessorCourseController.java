@@ -9,11 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.DesAca.DesAca.Course.CourseSummaryDTO;
+import com.DesAca.DesAca.Professor.Professor;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -58,4 +61,18 @@ public class ProfessorCourseController {
         return ResponseEntity.ok(courses);
     }
 
+    @GetMapping("/{courseId}/professors")
+    public ResponseEntity<List<Professor>> getProfessorsByCourseId(@PathVariable Long courseId) {
+        List<Professor> professors = professorCourseService.getProfessorsByCourseId(courseId);
+        if (professors.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(professors);
+    }
+
+    @PutMapping("/{professorCourseId}/attendance")
+    public ResponseEntity<ProfessorCourse> updateAttendancePercentage(@PathVariable Long professorCourseId, @RequestParam double percentage) {
+        ProfessorCourse updatedProfessorCourse = professorCourseService.updateAttendancePercentage(professorCourseId, percentage);
+        return ResponseEntity.ok(updatedProfessorCourse);
+    }
 }

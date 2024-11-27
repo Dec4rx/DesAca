@@ -2,6 +2,8 @@ package com.DesAca.DesAca.ProfessorCourse;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.DesAca.DesAca.Course.Course;
@@ -64,5 +66,20 @@ public class ProfessorCourseService {
 
     public List<CourseSummaryDTO> getFinishedCoursesByProfessorId(Long professorId) {
         return professorCourseRepository.findFinishedCoursesByProfessorId(professorId);
+    }
+
+    public List<Professor> getProfessorsByCourseId(Long courseId) {
+        List<ProfessorCourse> professorCourses = professorCourseRepository.findByCourseId(courseId);
+        return professorCourses.stream()
+                               .map(ProfessorCourse::getProfessor)
+                               .collect(Collectors.toList());
+    }
+
+    public ProfessorCourse updateAttendancePercentage(Long professorCourseId, double percentage) {
+        ProfessorCourse professorCourse = professorCourseRepository.findById(professorCourseId)
+            .orElseThrow(() -> new RuntimeException("ProfesorCourse not found"));
+
+        professorCourse.setAttendancePercentage(percentage);
+        return professorCourseRepository.save(professorCourse);
     }
 }

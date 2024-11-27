@@ -25,4 +25,5 @@ public interface ProfessorCourseRepository extends JpaRepository<ProfessorCourse
 
     boolean existsByProfessorAndCourse(Professor professor, Course course);
     boolean existsByCourse(Course course);
+    List<ProfessorCourse> findByCourseId(Long courseId);
 }

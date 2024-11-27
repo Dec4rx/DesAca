@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
@@ -16,10 +18,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 import com.DesAca.DesAca.Course.Course;
+import com.DesAca.DesAca.Department.Department;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
@@ -134,4 +138,7 @@ public class Diagnosis {
     @JsonIgnore
     private Course course;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_department"))
+    private Department departamentid;
 }

@@ -17,4 +17,5 @@ public interface ProfessorCourseRepository_Courses extends CrudRepository<Profes
             "FROM ProfessorCourse pc JOIN pc.course c WHERE pc.professor.id = :professorId")
     List<CourseSummaryDTO> findCourseSummariesByProfessorId(@Param("professorId") Long professorId);
 
+    
 }
