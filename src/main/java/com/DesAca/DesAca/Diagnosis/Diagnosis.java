@@ -1,13 +1,5 @@
 package com.DesAca.DesAca.Diagnosis;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +13,9 @@ import lombok.Setter;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
+import com.DesAca.DesAca.Career.Career;
 import com.DesAca.DesAca.Course.Course;
 import com.DesAca.DesAca.Department.Department;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -141,4 +135,12 @@ public class Diagnosis {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_department"))
     private Department departamentid;
+
+    @ManyToMany
+    @JoinTable(
+        name = "diagnosis_career", // Nombre de la tabla de unión
+        joinColumns = @JoinColumn(name = "diagnosis_id"), // Clave foránea de Diagnosis
+        inverseJoinColumns = @JoinColumn(name = "career_id") // Clave foránea de Career
+    )
+    private Set<Career> careers;  // Carreras asociadas al diagnóstico
 }

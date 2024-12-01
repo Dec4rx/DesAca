@@ -1,6 +1,8 @@
 package com.DesAca.DesAca.ProfessorCourse;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +28,6 @@ public interface ProfessorCourseRepository extends JpaRepository<ProfessorCourse
     boolean existsByProfessorAndCourse(Professor professor, Course course);
     boolean existsByCourse(Course course);
     List<ProfessorCourse> findByCourseId(Long courseId);
+
+    Optional<ProfessorCourse> findByCourseIdAndProfessorId(Long courseId, Long professorId);
 }

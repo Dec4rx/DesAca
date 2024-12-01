@@ -9,5 +9,6 @@ public class ProfessorCourseDTO {
     private Long professorId;
     private Long courseId;
     private boolean isFinished;
+    private String statusProf;
 }
 

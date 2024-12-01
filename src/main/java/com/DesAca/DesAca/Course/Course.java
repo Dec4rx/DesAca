@@ -7,9 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+
 import com.DesAca.DesAca.ProfessorCourse.ProfessorCourse;
 import com.DesAca.DesAca.Diagnosis.Diagnosis;
 import com.DesAca.DesAca.Instructor.Instructor;
+import com.DesAca.DesAca.Career.Career;
 import com.DesAca.DesAca.Department.Department;
 
 @Data
@@ -83,10 +86,6 @@ public class Course {
     private String departament;
 
     @Column(nullable = false)
-    @NotBlank(message = "El público objetivo no puede estar vacío")
-    private String aimedAt;
-
-    @Column(nullable = false)
     @NotBlank(message = "El tipo de curso no puede estar vacío")
     private String type;
 
@@ -149,4 +148,12 @@ public class Course {
 
     @Column(name = "folio", nullable = true)
     private String folio; // Campo para el folio
+
+    @ManyToMany
+    @JoinTable(
+        name = "course_career",
+        joinColumns = @JoinColumn(name = "course_id"),
+        inverseJoinColumns = @JoinColumn(name = "career_id")
+    )
+    private Set<Career> careers;  // Carreras que ofrecen este curso
 }

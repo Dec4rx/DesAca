@@ -74,9 +74,6 @@ public class Professor {
     @Size(min = 3, message = "Status debe tener al menos 3 caracteres")
     private String status;
 
-    @Column()
-    private String departament;
-
     @Column(nullable = false)
     @NotBlank(message = "Contraseña no puede ser nula")
     @Size(min = 8, message = "Contraseña debe tener al menos 8 caracteres")
@@ -88,7 +85,7 @@ public class Professor {
     private List<ProfessorCourse> professorCourses;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_department"))
+    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "fk_professor_department"))
     private Department departamentid;
 
 }

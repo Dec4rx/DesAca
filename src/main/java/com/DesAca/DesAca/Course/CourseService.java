@@ -1,12 +1,15 @@
 package com.DesAca.DesAca.Course;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.DesAca.DesAca.Career.Career;
+import com.DesAca.DesAca.Career.CareerRepository;
 import com.DesAca.DesAca.Diagnosis.Diagnosis;
 import com.DesAca.DesAca.Diagnosis.DiagnosisRepository;
 import com.DesAca.DesAca.Diagnosis.DiagnosisService;
@@ -22,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +39,7 @@ public class CourseService {
 
     @Autowired
     private InstructorRepository instructorRepository;
+    private CareerRepository careerRepository;
 
     @Transactional
     public Course createCourse(CourseDTO courseDTO) {
@@ -56,7 +61,6 @@ public class CourseService {
         Course course = new Course();
         course.setDiagnosis(diagnosis);
         course.setCourseName(courseDTO.getCourseName());
-        course.setAimedAt(courseDTO.getAimedAt());
         course.setType(courseDTO.getType());
         course.setApproach(courseDTO.getApproach());
         course.setPersonToTeach(courseDTO.getPersonToTeach());
@@ -77,6 +81,11 @@ public class CourseService {
         course.setAuthorization(courseDTO.getAuthorization());
         course.setReview(courseDTO.getReview());
         course.setEnabled(true); // Por defecto habilitado
+
+        if (courseDTO.getCareerIds() != null && !courseDTO.getCareerIds().isEmpty()) {
+        Set<Career> careers = new HashSet<>(careerRepository.findAllById(courseDTO.getCareerIds()));
+        course.setCareers(careers);
+    }
 
         logger.info("Curso creado localmente, listo para persistir: {}", course);
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Getter
@@ -45,9 +46,6 @@ public class CourseDTO {
     @NotBlank(message = "El departamento no puede estar vacío")
     @Size(min = 3, message = "El departamento debe tener al menos 3 caracteres")
     private String departament;
-
-    @NotBlank(message = "El público objetivo no puede estar vacío")
-    private String aimedAt;
 
     @NotBlank(message = "El tipo de curso no puede estar vacío")
     private String type;
@@ -88,4 +86,6 @@ public class CourseDTO {
 
     @NotBlank(message = "La revisión no puede estar vacía")
     private String review;
+
+    private List<Long> careerIds;
 }

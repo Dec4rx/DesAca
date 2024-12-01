@@ -38,5 +38,8 @@ public class ProfessorCourse {
     // Agregar campo para el porcentaje de asistencia
     @Column(nullable = false)
     private double attendancePercentage;
+
+    @Column(nullable = false)
+    private String statusProf;
 }
 

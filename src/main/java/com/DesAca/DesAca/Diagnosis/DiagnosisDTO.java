@@ -1,6 +1,7 @@
 package com.DesAca.DesAca.Diagnosis;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,4 +33,5 @@ public class DiagnosisDTO {
     private String feedback;
     private boolean isAuthorizedByFirst;
     private boolean isAuthorizedBySecond;
+    private List<Long> careerIds;
 }

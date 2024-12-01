@@ -1,5 +1,6 @@
 package com.DesAca.DesAca.Diagnosis;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 
+import com.DesAca.DesAca.Career.Career;
+import com.DesAca.DesAca.Career.CareerRepository;
+
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +23,47 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiagnosisService {
     private final DiagnosisRepository diagnosisRepository;
+    private final CareerRepository careerRepository;
 
-    public Diagnosis createDiagnosis(Diagnosis diagnosis) {
-        return diagnosisRepository.save(diagnosis);
+    @Transactional
+public Diagnosis createDiagnosis(DiagnosisDTO diagnosisDTO) {
+    // Crear una nueva instancia de Diagnosis
+    Diagnosis diagnosis = new Diagnosis();
+
+    // Asignar los datos básicos del diagnóstico
+    diagnosis.setDepartament(diagnosisDTO.getDepartament());
+    diagnosis.setDateDiagnosis(diagnosisDTO.getDateDiagnosis());
+    diagnosis.setHeadDepartment(diagnosisDTO.getHeadDepartment());
+    diagnosis.setPresidentAcademy(diagnosisDTO.getPresidentAcademy());
+    diagnosis.setTitleSubdirectorate(diagnosisDTO.getTitleSubdirectorate());
+    diagnosis.setRequiredSubjects(diagnosisDTO.getRequiredSubjects());
+    diagnosis.setThematicContents(diagnosisDTO.getThematicContents());
+    diagnosis.setNumberProfessors(diagnosisDTO.getNumberProfessors());
+    diagnosis.setTypeSubject(diagnosisDTO.getTypeSubject());
+    diagnosis.setActivityEvent(diagnosisDTO.getActivityEvent());
+    diagnosis.setObjective(diagnosisDTO.getObjective());
+    diagnosis.setCareersAttended(diagnosisDTO.getCareersAttended());
+    diagnosis.setPeriod(diagnosisDTO.getPeriod());
+    diagnosis.setShift(diagnosisDTO.getShift());
+    diagnosis.setStartDate(diagnosisDTO.getStartDate());
+    diagnosis.setEndDate(diagnosisDTO.getEndDate());
+    diagnosis.setStatus(diagnosisDTO.getStatus());
+    diagnosis.setFacilitators(diagnosisDTO.getFacilitators());
+    diagnosis.setFeedback(diagnosisDTO.getFeedback());
+    diagnosis.setAuthorizedByFirst(diagnosisDTO.isAuthorizedByFirst());
+    diagnosis.setAuthorizedBySecond(diagnosisDTO.isAuthorizedBySecond());
+
+    // Asociar las carreras al diagnóstico
+    if (diagnosisDTO.getCareerIds() != null && !diagnosisDTO.getCareerIds().isEmpty()) {
+        // Cargar las carreras de la base de datos
+        List<Career> careers = careerRepository.findAllById(diagnosisDTO.getCareerIds());
+        diagnosis.setCareers(new HashSet<>(careers)); // Convertir a Set para la relación
     }
+
+    // Guardar el diagnóstico en la base de datos
+    return diagnosisRepository.save(diagnosis);
+}
+
 
     public ResponseEntity<Diagnosis> getDiagnosisById(Long id) {
         Optional<Diagnosis> diagnosis = diagnosisRepository.findById(id);
@@ -158,7 +199,8 @@ public class DiagnosisService {
                             updatedDiagnosis.getFacilitators(),
                             updatedDiagnosis.getFeedback(),
                             updatedDiagnosis.isAuthorizedByFirst(),
-                            updatedDiagnosis.isAuthorizedBySecond()));
+                            updatedDiagnosis.isAuthorizedBySecond(), 
+                            null));
 
         } catch (DataIntegrityViolationException e) {
             // Maneja errores relacionados con integridad de datos, como restricciones de la

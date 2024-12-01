@@ -3,7 +3,10 @@ package com.DesAca.DesAca.ProfessorCourse;
 import java.util.List;
 
 import java.util.Map;
+import java.io.IOException;
 import java.util.HashMap;
+
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +38,8 @@ public class ProfessorCourseController {
             professorCourseService.createProfessorCourse(
                     professorCourseDTO.getProfessorId(),
                     professorCourseDTO.getCourseId(),
-                    professorCourseDTO.isFinished());
+                    professorCourseDTO.isFinished(),
+                    professorCourseDTO.getStatusProf());
 
             response.put("message", "Relación guardada exitosamente");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -74,5 +78,30 @@ public class ProfessorCourseController {
     public ResponseEntity<ProfessorCourse> updateAttendancePercentage(@PathVariable Long professorCourseId, @RequestParam double percentage) {
         ProfessorCourse updatedProfessorCourse = professorCourseService.updateAttendancePercentage(professorCourseId, percentage);
         return ResponseEntity.ok(updatedProfessorCourse);
+    }
+
+    /**
+     * Endpoint para generar y descargar una constancia en formato PDF.
+     *
+     * @param courseId     ID del curso
+     * @param professorId  ID del profesor
+     * @return PDF de la constancia como respuesta HTTP
+     */
+    @GetMapping("/certificates/download")
+    public ResponseEntity<InputStreamResource> downloadCertificate(
+            @RequestParam Long courseId,
+            @RequestParam Long professorId) {
+        try {
+            return professorCourseService.generateAndDownloadCertificate(courseId, professorId);
+        } catch (IllegalArgumentException e) {
+            // Manejo de errores específicos (datos inválidos)
+            return ResponseEntity.badRequest().body(null);
+        } catch (IOException e) {
+            // Manejo de errores de entrada/salida
+            return ResponseEntity.status(500).body(null);
+        } catch (Exception e) {
+            // Manejo genérico de errores inesperados
+            return ResponseEntity.status(500).body(null);
+        }
     }
 }
